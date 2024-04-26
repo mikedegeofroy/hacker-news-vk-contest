@@ -1,4 +1,4 @@
-export { Persik } from './Persik';
-export { Home } from './Home';
+export { Persik } from '@/panels/Persik';
+export { Home } from '@/panels/Home';
 
 export type { HomeProps } from './Home';

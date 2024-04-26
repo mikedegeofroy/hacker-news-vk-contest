@@ -6,11 +6,16 @@ import {
   PanelHeaderBack,
   Placeholder,
 } from '@vkontakte/vkui';
-import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import PersikImage from '../assets/persik.png';
+import PersikImage from '@/assets/persik.png';
+import { Routes } from '@/routes';
+import { useRouteNavigatorProxy } from '@/hooks/useRouteNavigatorProxy';
 
-export const Persik: FC<NavIdProps> = ({ id }) => {
-  const routeNavigator = useRouteNavigator();
+export interface PersikProps extends NavIdProps {
+  id: Routes,
+}
+
+export const Persik: FC<PersikProps> = ({ id }) => {
+  const routeNavigator = useRouteNavigatorProxy<Routes>();
 
   return (
     <Panel id={id}>

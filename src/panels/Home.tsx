@@ -11,15 +11,17 @@ import {
   NavIdProps,
 } from '@vkontakte/vkui';
 import { UserInfo } from '@vkontakte/vk-bridge';
-import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import { useRouteNavigatorProxy } from '@/hooks/useRouteNavigatorProxy';
+import { Routes } from '@/routes';
 
 export interface HomeProps extends NavIdProps {
+  id: Routes,
   fetchedUser?: UserInfo;
 }
 
 export const Home: FC<HomeProps> = ({ id, fetchedUser }) => {
   const { photo_200, city, first_name, last_name } = { ...fetchedUser };
-  const routeNavigator = useRouteNavigator();
+  const routeNavigator = useRouteNavigatorProxy<Routes>();
 
   return (
     <Panel id={id}>
