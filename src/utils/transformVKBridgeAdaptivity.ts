@@ -23,7 +23,8 @@ export const transformVKBridgeAdaptivity = ({
       return {
         viewWidth: ViewWidth.MOBILE,
         sizeX: SizeType.COMPACT,
-        sizeY: type === 'force_mobile_compact' ? SizeType.COMPACT : SizeType.REGULAR,
+        sizeY:
+          type === 'force_mobile_compact' ? SizeType.COMPACT : SizeType.REGULAR,
       };
     default:
       return {};
