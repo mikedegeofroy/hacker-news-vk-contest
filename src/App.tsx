@@ -1,34 +1,42 @@
-import { useState, useEffect, ReactNode } from 'react';
+import { useState, useEffect } from 'react';
 import bridge, { UserInfo } from '@vkontakte/vk-bridge';
-import { View, SplitLayout, SplitCol, ScreenSpinner } from '@vkontakte/vkui';
+import { View, SplitLayout, SplitCol } from '@vkontakte/vkui';
 import { useActiveVkuiLocation } from '@vkontakte/vk-mini-apps-router';
 
-import { Persik, Home } from '@/panels';
+import { Home } from '@/panels/home';
 import { DEFAULT_VIEW_PANELS } from '@/routes';
+import { Article } from './panels/article';
 
 export const App = () => {
   const { panel: activePanel = DEFAULT_VIEW_PANELS.HOME } =
     useActiveVkuiLocation();
   const [fetchedUser, setUser] = useState<UserInfo | undefined>();
-  const [popout, setPopout] = useState<ReactNode | null>(
-    <ScreenSpinner size='large' />
-  );
 
   useEffect(() => {
     async function fetchData() {
       const user = await bridge.send('VKWebAppGetUserInfo');
       setUser(user);
-      setPopout(null);
     }
     fetchData();
   }, []);
 
   return (
-    <SplitLayout popout={popout}>
+    <SplitLayout popout={false}>
       <SplitCol>
         <View activePanel={activePanel}>
           <Home id='home' fetchedUser={fetchedUser} />
-          <Persik id='persik' />
+          <Article
+            id='article'
+            article={{
+              content_id: 0,
+              author: 'mikedegeofroy',
+              title:
+                'Radicle is an open source, peer-to-peer code collaboration stack built on Git',
+              score: 1878,
+              datetime: new Date(),
+              new: false,
+            }}
+          />
         </View>
       </SplitCol>
     </SplitLayout>

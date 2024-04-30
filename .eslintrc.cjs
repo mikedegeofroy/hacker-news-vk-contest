@@ -19,7 +19,6 @@ module.exports = {
     'jsx-quotes': ['error', 'prefer-single'],
     'prefer-const': 'error',
     indent: ['error', 2, {SwitchCase: 1}],
-    'max-len': ['error', { code: 120 }],
     'import/no-unterminated-multiline': ['off'],
   },
 };
