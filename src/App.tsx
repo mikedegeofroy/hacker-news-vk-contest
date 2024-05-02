@@ -3,14 +3,18 @@ import bridge, { UserInfo } from '@vkontakte/vk-bridge';
 import { View, SplitLayout, SplitCol, ScreenSpinner } from '@vkontakte/vkui';
 import { useActiveVkuiLocation } from '@vkontakte/vk-mini-apps-router';
 
-import { Persik, Home } from '@/panels';
-import { DEFAULT_VIEW_PANELS } from '@/routes';
+import { HomePage } from '@/pages';
+import { Routes } from '@/routes';
+import { ArticlePage } from './pages/article/article.page';
+import { UserPage } from './pages/user/user.page';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 export const App = () => {
-  const { panel: activePanel = DEFAULT_VIEW_PANELS.HOME } =
-    useActiveVkuiLocation();
+  const { panel: activePanel = Routes.Home } = useActiveVkuiLocation();
   const [fetchedUser, setUser] = useState<UserInfo | undefined>();
-  const [popout, setPopout] = useState<ReactNode | null>(
+  const [, setPopout] = useState<ReactNode | null>(
     <ScreenSpinner size='large' />
   );
 
@@ -24,13 +28,16 @@ export const App = () => {
   }, []);
 
   return (
-    <SplitLayout popout={popout}>
-      <SplitCol>
-        <View activePanel={activePanel}>
-          <Home id='home' fetchedUser={fetchedUser} />
-          <Persik id='persik' />
-        </View>
-      </SplitCol>
-    </SplitLayout>
+    <QueryClientProvider client={queryClient}>
+      <SplitLayout>
+        <SplitCol>
+          <View activePanel={activePanel}>
+            <HomePage id={Routes.Home} fetchedUser={fetchedUser} />
+            <ArticlePage id={Routes.Article} />
+            <UserPage id={Routes.User} />
+          </View>
+        </SplitCol>
+      </SplitLayout>
+    </QueryClientProvider>
   );
 };
