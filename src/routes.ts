@@ -13,6 +13,7 @@ export const DEFAULT_VIEW = 'default_view';
 export const DEFAULT_VIEW_PANELS = {
   HOME: 'home',
   ARTICLE: 'article',
+  USER: 'user',
 } as const;
 
 export const routes = RoutesConfig.create([
@@ -21,9 +22,11 @@ export const routes = RoutesConfig.create([
       createPanel(DEFAULT_VIEW_PANELS.HOME, '/', []),
       createPanel(
         DEFAULT_VIEW_PANELS.ARTICLE,
-        `/${DEFAULT_VIEW_PANELS.ARTICLE}`,
-        []
+        `/${DEFAULT_VIEW_PANELS.ARTICLE}/:id`,
+        [],
+        ['id'] as const
       ),
+      createPanel(DEFAULT_VIEW_PANELS.USER, `/${DEFAULT_VIEW_PANELS.USER}`, []),
     ]),
   ]),
 ]);

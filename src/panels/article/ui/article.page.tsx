@@ -1,80 +1,42 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { IArticlePageProps } from '../model/types';
-import { Card, CardGrid, Group, Panel } from '@vkontakte/vkui';
+import {
+  Card,
+  Panel,
+  PanelHeader,
+  PanelHeaderBack,
+} from '@vkontakte/vkui';
 
 import styles from './article.module.css';
-import { Icon20Bookmark, Icon20LogoVk } from '@vkontakte/icons';
-import { ArticleCard } from '@/entities/articles/ui/article';
-import { IArticleProps } from '@/entities/articles/model/types';
+import {
+  Icon20Bookmark,
+  Icon20BookmarkOutline,
+  Icon20LogoVk,
+} from '@vkontakte/icons';
 import bridge from '@vkontakte/vk-bridge';
-
-const articles: IArticleProps[] = [
-  {
-    title:
-      'Radicle is an open source, peer-to-peer code collaboration stack built on Git ',
-    author: 'Mike de Geofroy',
-    score: 1173,
-    datetime: new Date(),
-    new: true,
-    content_id: 0,
-  },
-  {
-    title:
-      'Radicle is an open source, peer-to-peer code collaboration stack built on Git ',
-    author: 'Mike de Geofroy',
-    score: 1173,
-    datetime: new Date(),
-    new: true,
-    content_id: 0,
-  },
-  {
-    title:
-      'Radicle is an open source, peer-to-peer code collaboration stack built on Git ',
-    author: 'Mike de Geofroy',
-    score: 1173,
-    datetime: new Date(),
-    new: false,
-    content_id: 0,
-  },
-  {
-    title:
-      'Radicle is an open source, peer-to-peer code collaboration stack built on Git ',
-    author: 'Mike de Geofroy',
-    score: 1173,
-    datetime: new Date(),
-    new: false,
-    content_id: 0,
-  },
-  {
-    title:
-      'Radicle is an open source, peer-to-peer code collaboration stack built on Git ',
-    author: 'Mike de Geofroy',
-    score: 1173,
-    datetime: new Date(),
-    new: false,
-    content_id: 0,
-  },
-];
+import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 
 export const Article: FC<IArticlePageProps> = ({ id, article }) => {
+  const router = useRouteNavigator();
+  const params = useParams<'id'>();
+
+  const [saved, setSaved] = useState(false);
+
+  console.log(params?.id);
+
   const share = () => {
-    bridge
-      .send('VKWebAppShare', {
-        link: 'https://vk.com/vkappsdev',
-      })
-      .then((data) => {
-        if (data.result) {
-          // Запись размещена
-        }
-      })
-      .catch((error) => {
-        // Ошибка
-        console.log(error);
-      });
+    bridge.send('VKWebAppShare', {
+      link: 'https://vk.com/app51913442_560086918',
+    });
   };
 
   return (
     <Panel id={id}>
+      <PanelHeader
+        before={
+          <PanelHeaderBack onClick={() => router.back()}></PanelHeaderBack>
+        }
+      ></PanelHeader>
       <div style={{ margin: '12px', marginTop: '48px' }}>
         <h1 className={styles['title']}>{article.title}</h1>
         <Card className={styles['header-card']}>
@@ -92,8 +54,11 @@ export const Article: FC<IArticlePageProps> = ({ id, article }) => {
             <div onClick={share} className={styles['lower-icon']}>
               <Icon20LogoVk />
             </div>
-            <div className={styles['lower-icon']}>
-              <Icon20Bookmark />
+            <div
+              className={styles['lower-icon']}
+              onClick={() => setSaved(!saved)}
+            >
+              {saved ? <Icon20BookmarkOutline /> : <Icon20Bookmark />}
             </div>
           </div>
         </Card>
@@ -103,6 +68,8 @@ export const Article: FC<IArticlePageProps> = ({ id, article }) => {
           marginTop: '100px',
           position: 'relative',
           paddingTop: '50px',
+          overflow: 'hidden',
+          flexGrow: 1,
         }}
       >
         <div
@@ -116,15 +83,9 @@ export const Article: FC<IArticlePageProps> = ({ id, article }) => {
             left: '50%',
             transform: 'translate(-50%)',
             top: 0,
+            zIndex: 10,
           }}
         />
-        <Group>
-          <CardGrid size='l'>
-            {articles.map((article, key) => (
-              <ArticleCard {...article} key={key} />
-            ))}
-          </CardGrid>
-        </Group>
       </div>
     </Panel>
   );

@@ -1,16 +1,22 @@
 import { useState, useEffect } from 'react';
 import bridge, { UserInfo } from '@vkontakte/vk-bridge';
 import { View, SplitLayout, SplitCol } from '@vkontakte/vkui';
-import { useActiveVkuiLocation } from '@vkontakte/vk-mini-apps-router';
+import {
+  useActiveVkuiLocation,
+  useRouteNavigator,
+} from '@vkontakte/vk-mini-apps-router';
 
 import { Home } from '@/panels/home';
 import { DEFAULT_VIEW_PANELS } from '@/routes';
 import { Article } from './panels/article';
+import { UserPage } from './panels/user/ui/user.page';
 
 export const App = () => {
-  const { panel: activePanel = DEFAULT_VIEW_PANELS.HOME } =
+  const { panel: activePanel = DEFAULT_VIEW_PANELS.HOME, panelsHistory } =
     useActiveVkuiLocation();
   const [fetchedUser, setUser] = useState<UserInfo | undefined>();
+
+  const routeNavigator = useRouteNavigator();
 
   useEffect(() => {
     async function fetchData() {
@@ -23,8 +29,13 @@ export const App = () => {
   return (
     <SplitLayout popout={false}>
       <SplitCol>
-        <View activePanel={activePanel}>
+        <View
+          activePanel={activePanel}
+          onSwipeBack={() => routeNavigator.back()}
+          history={panelsHistory}
+        >
           <Home id='home' fetchedUser={fetchedUser} />
+          <UserPage id={'user'} fetchedUser={fetchedUser}></UserPage>
           <Article
             id='article'
             article={{

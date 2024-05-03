@@ -1,14 +1,5 @@
 import { FC } from 'react';
-import {
-  Panel,
-  Header,
-  Group,
-  Cell,
-  Avatar,
-  NavIdProps,
-  CardGrid,
-  Button,
-} from '@vkontakte/vkui';
+import { Panel, Group, NavIdProps, CardGrid } from '@vkontakte/vkui';
 import { UserInfo } from '@vkontakte/vk-bridge';
 import { ArticleCard } from '@/entities/articles/ui/article';
 
@@ -71,58 +62,21 @@ export interface IHomeProps extends NavIdProps {
 }
 
 export const Home: FC<IHomeProps> = ({ id, fetchedUser }) => {
-  const { photo_200, city, first_name, last_name } = { ...fetchedUser };
+  const { photo_200 } = { ...fetchedUser };
   const router = useRouteNavigator();
 
   return (
     <Panel id={id}>
-      <div style={{ padding: '20px' }}>
+      <div style={{ padding: '20px', paddingTop: '40px' }}>
         <h1 className={styles['title']}>Hello 👋</h1>
       </div>
-      {fetchedUser && (
-        <Group
-          header={
-            <Header mode='secondary'>User Data Fetched with VK Bridge</Header>
-          }
-        >
-          <Cell
-            before={photo_200 && <Avatar src={photo_200} />}
-            subtitle={city?.title}
-          >
-            {`${first_name} ${last_name}`}
-          </Cell>
-        </Group>
-      )}
-      <Banner />
-      <div style={{ padding: '12px', display: 'flex', gap: 10 }}>
-        <Button
-          style={{ paddingRight: '20px', paddingLeft: '20px' }}
-          appearance='overlay'
-          size='m'
-        >
-          Type1
-        </Button>
-        <Button
-          style={{ paddingRight: '20px', paddingLeft: '20px' }}
-          appearance='overlay'
-          size='m'
-        >
-          Type1
-        </Button>
-        <Button
-          style={{ paddingRight: '20px', paddingLeft: '20px' }}
-          appearance='overlay'
-          size='m'
-        >
-          Type1
-        </Button>
-      </div>
+      <Banner avatar={photo_200} onClick={() => router.push('user')} />
       <Group>
         <CardGrid size='l'>
           {articles.map((article, key) => (
             <ArticleCard
               {...article}
-              onClick={() => router.push('/article')}
+              onClick={() => router.push(`/article/${article.content_id}`)}
               key={key}
             />
           ))}
